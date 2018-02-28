@@ -53,6 +53,15 @@ func init() {
 				builder.NewBox(w, w, h).SnapMaxX(mount.MaxX()),
 				builder.NewBox(w, w, h).SnapMinX(mount.MinX()),
 				builder.NewBox(dia+w*4+t*2, w, w),
+
+				builder.NewCylinder(w, magRingDia+t*2).
+					Difference(builder.NewCylinder(w, magRingDia-t*2)).
+					RotateX(math.Pi/2).
+					SnapMidZ(h).
+					SnapMidY(0).
+					Intersection(
+						builder.NewBox(dia, w, h),
+					),
 			).
 			Difference(
 				builder.
@@ -66,10 +75,11 @@ func init() {
 					RotateYOrigin(math.Pi/magRingCount*2, 0, 0, h),
 				magMount.
 					RotateYOrigin(-math.Pi/magRingCount*2, 0, 0, h),
+				magMount,
 
 				builder.
-					NewCylinder(t/2, dia+t*2).
-					Difference(builder.NewCylinder(t/2, dia-t)).
+					NewCylinder(1, dia+t*2).
+					Difference(builder.NewCone(1, dia-2, dia)). // 1x1 = quarter angle or 45 deg. most printers should handle it fine
 					RotateX(math.Pi/2).
 					SnapMidZ(h).
 					SnapMinY(mount.MaxY()),
@@ -79,6 +89,7 @@ func init() {
 					RotateYOrigin(math.Pi/magRingCount*2, 0, 0, h),
 				magHole.
 					RotateYOrigin(-math.Pi/magRingCount*2, 0, 0, h),
+				magHole,
 			)
 
 		mount = mount.Difference(
