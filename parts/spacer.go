@@ -11,7 +11,7 @@ func init() {
 		ID     = 8
 		screwD = 3.5
 		inset  = 1.5
-		space  = 1.5
+		space  = .75
 	)
 	Register("spacer", func() sdf.SDF3 {
 		return builder.
