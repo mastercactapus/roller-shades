@@ -36,7 +36,7 @@ func renderPNG(name string, floor bool) {
 	sdf.RenderPNG(mesh, floor)
 }
 func main() {
-	resolution := flag.Int("res", 200, "Render sampling resolution (only valid for STL).")
+	resolution := flag.Int("res", 250, "Render sampling resolution (only valid for STL).")
 	png := flag.Bool("png", false, "Render PNG instead of STL.")
 	floor := flag.Bool("floor", false, "Render the floor (only valid for PNG).")
 	flag.Parse()
