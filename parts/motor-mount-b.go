@@ -15,8 +15,8 @@ func init() {
 		screwD = 3.5
 
 		// photointurrupter measurements. Expected = |Arm|Slot|Arm|Hole|
-		piW          = 6.75 //width
-		piD          = 15.6 // depth
+		piW          = 6.5  //width
+		piD          = 15.5 // depth
 		piH          = 2.5  // height of the base (not the arms)
 		piSlotW      = 2    // width of the slot
 		piArmW       = 4    // width of each arm
@@ -40,12 +40,19 @@ func init() {
 		)
 		piMount := builder.
 			NewBox(piW, piH, piD).
+			SnapMinY(0)
+
+		piMount = piMount.
+			Union(
+				builder.NewBox(piW, t*2, piArmW*2+piSlotW).SnapMinY(0).SnapMaxZ(piMount.MaxZ()),
+				builder.NewCylinder(t*2, 3).RotateX(math.Pi/2).SnapMidZ((piD-(piArmW*2+piSlotW))/2).SnapMinY(0),
+			).
 			Translate(0, 0, 1).
 			SnapMinY(mount.MinY())
 
 		mount = mount.Difference(
-			piMount.RotateYOrigin(math.Pi/20, 0, 0, h),
-			piMount.RotateYOrigin(-math.Pi/20, 0, 0, h),
+			piMount.RotateYOrigin(math.Pi/15, 0, 0, h),
+			piMount.RotateYOrigin(-math.Pi/15, 0, 0, h),
 		)
 
 		screw := builder.
@@ -72,9 +79,11 @@ func init() {
 
 				screw.SnapMinX(mount.MinX()+screwOff),
 				screw.SnapMaxX(mount.MaxX()-screwOff),
+			).
+			Union(
+				builder.NewBox(t, 15, ledgeH).SnapMaxY(mount.MinY()),
 			)
 
-		return mount
 		return mount.RotateX(-math.Pi / 2).SnapMinZ(0)
 	})
 }
