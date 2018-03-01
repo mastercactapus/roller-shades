@@ -24,7 +24,7 @@ func init() {
 		piHoleOffset = 2.25  // center of the mounting hole from the edge
 
 		// encoder diameter = h - piD + piArmW + piSlotW/2
-		// 40 - 20.65 +5
+		// 40 - 15.65 +5
 	)
 	Register("motor-mount-b", func() sdf.SDF3 {
 		ledgeH := h - nema17Dia/2
