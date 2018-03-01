@@ -16,7 +16,7 @@ func init() {
 
 		magD         = 6.55
 		magRingDia   = 40
-		magRingCount = 10
+		magRingCount = 9
 	)
 	Register("idler-mount", func() sdf.SDF3 {
 		mount := builder.
@@ -46,22 +46,34 @@ func init() {
 			).
 			Mirror(false, false, true).
 			SnapMidY(mount.MidY()).
-			Translate(0, 0, 9)
+			Translate(0, 0, 8)
+
+		foot := builder.
+			NewBox(dia+w*4+t*2, w, w)
+
+		toe := builder.
+			NewBox(w*2, w*2, w).
+			Difference(screw).
+			SnapMinY(foot.MaxY())
+		foot = foot.
+			Union(
+				toe.SnapMinX(foot.MinX()),
+				toe.SnapMaxX(foot.MaxX()),
+			)
 
 		mount = mount.
 			Union(
 				builder.NewBox(w, w, h).SnapMaxX(mount.MaxX()),
 				builder.NewBox(w, w, h).SnapMinX(mount.MinX()),
-				builder.NewBox(dia+w*4+t*2, w, w),
+				foot,
 
 				builder.NewCylinder(w, magRingDia+t*2).
 					Difference(builder.NewCylinder(w, magRingDia-t*2)).
 					RotateX(math.Pi/2).
 					SnapMidZ(h).
-					SnapMidY(0).
-					Intersection(
-						builder.NewBox(dia, w, h),
-					),
+					SnapMidY(0),
+
+				builder.NewBox(dia+t*2-w*2, w, (magRingDia-dia)/2-t).SnapMinZ(mount.MaxZ()-t),
 			).
 			Difference(
 				builder.
@@ -71,12 +83,7 @@ func init() {
 					SnapMidZ(h),
 			).
 			Union(
-				magMount.
-					RotateYOrigin(math.Pi/magRingCount*2, 0, 0, h),
-				magMount.
-					RotateYOrigin(-math.Pi/magRingCount*2, 0, 0, h),
-				magMount,
-
+				magMount.RotateYCopyOrigin(3, 0, 0, h),
 				builder.
 					NewCylinder(1, dia+t*2).
 					Difference(builder.NewCone(1, dia-2, dia)). // 1x1 = quarter angle or 45 deg. most printers should handle it fine
@@ -85,17 +92,8 @@ func init() {
 					SnapMinY(mount.MaxY()),
 			).
 			Difference(
-				magHole.
-					RotateYOrigin(math.Pi/magRingCount*2, 0, 0, h),
-				magHole.
-					RotateYOrigin(-math.Pi/magRingCount*2, 0, 0, h),
-				magHole,
+				magHole.RotateYCopyOrigin(3, 0, 0, h),
 			)
-
-		mount = mount.Difference(
-			screw.SnapMinX(mount.MinX()),
-			screw.SnapMaxX(mount.MaxX()),
-		)
 
 		return mount.RotateX(math.Pi / 2).SnapMinZ(0)
 	})
