@@ -15,13 +15,16 @@ func init() {
 		screwD = 3.5
 
 		// photointurrupter measurements. Expected = |Arm|Slot|Arm|Hole|
-		piW          = 6.5  //width
-		piD          = 15.5 // depth
-		piH          = 2.5  // height of the base (not the arms)
-		piSlotW      = 2    // width of the slot
-		piArmW       = 4    // width of each arm
-		piLeadOffset = 1    // offset from the edge that the leads stick out
-		piHoleOffset = 2.25 // center of the mounting hole from the edge
+		piW          = 6.65  //width
+		piD          = 15.65 // depth
+		piH          = 4     // height of the base (not the arms)
+		piSlotW      = 2.1   // width of the slot
+		piArmW       = 4     // width of each arm
+		piLeadOffset = 1     // offset from the edge that the leads stick out
+		piHoleOffset = 2.25  // center of the mounting hole from the edge
+
+		// encoder diameter = h - piD + piArmW + piSlotW/2
+		// 40 - 20.65 +5
 	)
 	Register("motor-mount-b", func() sdf.SDF3 {
 		ledgeH := h - nema17Dia/2
@@ -41,7 +44,6 @@ func init() {
 		piMount := builder.
 			NewBox(piW, piH, piD).
 			SnapMinY(0)
-
 		piMount = piMount.
 			Union(
 				builder.NewBox(piW, t*2, piArmW*2+piSlotW).SnapMinY(0).SnapMaxZ(piMount.MaxZ()),
@@ -51,8 +53,8 @@ func init() {
 			SnapMinY(mount.MinY())
 
 		mount = mount.Difference(
-			piMount.RotateYOrigin(math.Pi/15, 0, 0, h),
-			piMount.RotateYOrigin(-math.Pi/15, 0, 0, h),
+			piMount.RotateYOrigin(math.Pi/12, 0, 0, h),
+			piMount.RotateYOrigin(-math.Pi/12, 0, 0, h),
 		)
 
 		screw := builder.
