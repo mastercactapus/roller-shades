@@ -9,6 +9,7 @@ import (
 
 var names = make(map[string]func() sdf.SDF3)
 
+// Register will add a new part to be available for rendering.
 func Register(name string, fn func() sdf.SDF3) {
 	names[name] = fn
 }
