@@ -22,14 +22,14 @@ func init() {
 		thickness = 2
 		height    = 7
 
-		diameter = 53.5
+		diameter = 56
 
-		motorShaftDiameter = 6.3
+		motorShaftDiameter = 5.2
 
-		slots = 19
+		slots = 15
 	)
 
-	Register("encoder-disc2", func() sdf.SDF3 {
+	Register("encoder-disc", func() sdf.SDF3 {
 		outerRing := NewCylinder(thickness, diameter+thickness*2).
 			Difference(NewCylinder(thickness, diameter-thickness*2))
 
@@ -40,7 +40,7 @@ func init() {
 		)
 
 		arms := NewBox(diameter, thickness*2, thickness).RotateZCopy(4)
-		shaft := NewCylinder(height+1.5, motorShaftDiameter+thickness*3)
+		shaft := NewCylinder(height-1.5, motorShaftDiameter+thickness*2)
 
 		motorShaft := NewCylinder(height*2, motorShaftDiameter).Difference(
 			NewBox(.5, motorShaftDiameter, height*2).Translate(motorShaftDiameter/2-.25, 0, 0),
