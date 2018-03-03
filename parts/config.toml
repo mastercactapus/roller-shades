@@ -1,0 +1,36 @@
+
+[Encoder]
+Diameter = 56.0 # diameter of encoder ring (middle of tabs)
+Slots = 15 # number of slots on the encoder
+Thickness = 2.0 # thickness of the backplate & supports
+Height = 7.0 # height of shaft ring
+
+[Motor]
+ShaftDiameter = 5.2 # diameter of motor shaft (without the flat side)
+FlatDepth = 0.5 # depth of the flat part
+
+[Misc]
+ScrewDiameter = 3.5 # M3 machine screw diameter
+NutSize = 5.5 # nut size
+Height = 40.0 # Height from base to center of roller
+
+[Roller]
+ID = 15.4 # inner diameter of the roller tube
+
+
+[MagStop]
+StopPositions = 9 # number of stop positions, must be divisible by 3
+MagDiameter = 6.45 # diameter of individual magnets
+RingDiameter = 40.0 # desired diameter of the magnetic ring
+
+[MagStop.Bearing] # 806
+ID = 8.0 # diameter of inner race
+OD = 22.0 # outer diameter
+T = 7.0 # thickness of bearing
+
+[Inturrupter] # Photointurrupter shape |Arm|Slot|Arm|Hole|
+Width        = 6.65
+Length       = 15.75
+BaseHeight   = 4.0 # height of just the base
+ArmThickness = 4.0 # thickness of each "arm" (lengthwise)
+SlotWidth    = 2.15 # how wide the inner slot is from arm to arm

@@ -9,24 +9,17 @@ import (
 
 func init() {
 	const (
-		h = 40 // target height of the shaft center
-
-		t      = 3
-		screwD = 3.5
-
-		// photointurrupter measurements. Expected = |Arm|Slot|Arm|Hole|
-		piW          = 6.65  //width
-		piD          = 15.75 // depth
-		piH          = 4     // height of the base (not the arms)
-		piSlotW      = 2.15  // width of the slot
-		piArmW       = 4     // width of each arm
-		piLeadOffset = 1     // offset from the edge that the leads stick out
-		piHoleOffset = 2.25  // center of the mounting hole from the edge
-
-		// encoder diameter = h - piD + piArmW + piSlotW/2
-		// 40 - 15.65 +5
+		t = 3
 	)
-	Register("motor-mount-b", func() sdf.SDF3 {
+	Register("motor-mount", func() sdf.SDF3 {
+		h := cfg.Misc.Height
+		screwD := cfg.Misc.ScrewDiameter
+		piW := cfg.Inturrupter.Width
+		piArmW := cfg.Inturrupter.ArmThickness
+		piH := cfg.Inturrupter.BaseHeight
+		piD := cfg.Inturrupter.Length
+		piSlotW := cfg.Inturrupter.SlotWidth
+
 		ledgeH := h - nema17Dia/2
 
 		ledge := builder.NewBox(nema17Dia, t+1, ledgeH)

@@ -7,13 +7,13 @@ import (
 
 func init() {
 	const (
-		OD     = 12
-		ID     = 8
-		screwD = 3.5
-		inset  = 1.5
-		space  = .75
+		inset = 1.5
+		space = .75
 	)
 	Register("spacer", func() sdf.SDF3 {
+		screwD := cfg.Misc.ScrewDiameter
+		ID := cfg.MagStop.Bearing.ID
+		OD := ID + 4
 		return builder.
 			NewCylinder(space+inset, ID).
 			Union(

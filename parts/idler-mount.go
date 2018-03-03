@@ -9,16 +9,16 @@ import (
 
 func init() {
 	const (
-		t   = 2
-		w   = 7
-		dia = 22
-		h   = 40
-
-		magD         = 6.55
-		magRingDia   = 40
-		magRingCount = 9
+		t = 2
 	)
 	Register("idler-mount", func() sdf.SDF3 {
+
+		dia := cfg.MagStop.Bearing.OD
+		h := cfg.Misc.Height
+		w := cfg.MagStop.Bearing.T
+		magRingDia := cfg.MagStop.RingDiameter
+		magD := cfg.MagStop.MagnetDiameter + 0.1
+
 		mount := builder.
 			NewCylinder(w, dia+t*2).
 			RotateX(math.Pi / 2).
