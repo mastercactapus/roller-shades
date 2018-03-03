@@ -3,6 +3,8 @@ package main
 import (
 	"flag"
 	"log"
+	"os"
+	"path/filepath"
 
 	"github.com/deadsy/sdfx/sdf"
 )
@@ -27,29 +29,31 @@ func getMesh(name string) sdf.SDF3 {
 	cache[name] = fn()
 	return cache[name]
 }
-func renderSTL(name string, mesh sdf.SDF3, ppmm float64) {
+func renderSTL(dir, name string, mesh sdf.SDF3, res float64) {
 	if mesh == nil {
 		return
 	}
-	res := int(mesh.BoundingBox().Size().MaxComponent() * ppmm)
-	sdf.RenderSTL(mesh, res, name+".stl")
+	cells := int(mesh.BoundingBox().Size().MaxComponent() / res)
+	os.MkdirAll(dir, 0755)
+	sdf.RenderSTL(mesh, cells, filepath.Join(dir, name+".stl"))
 }
 
 func main() {
-	resolution := flag.Float64("res", 5, "Render sampling resolution (pixels per mm).")
+	res := flag.Float64("res", 0.2, "Render sampling resolution (smaller values increase detail).")
 	assemble := flag.Bool("assemble", false, "Render assembly instructions.")
+	dir := flag.String("out", "stl", "Output directory for STL files.")
 	flag.Parse()
 	if flag.NArg() == 0 {
 		log.Println("Processing all", len(names), "objects.")
 		for name := range names {
-			renderSTL(name, getMesh(name), *resolution)
+			renderSTL(*dir, name, getMesh(name), *res)
 		}
 	} else {
 		for _, name := range flag.Args() {
-			renderSTL(name, getMesh(name), *resolution)
+			renderSTL(*dir, name, getMesh(name), *res)
 		}
 	}
 	if *assemble {
-		renderSTL("assemble", assembleMesh(), *resolution)
+		renderSTL(*dir, "assemble", assembleMesh(), *res)
 	}
 }
