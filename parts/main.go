@@ -8,6 +8,7 @@ import (
 )
 
 var names = make(map[string]func() sdf.SDF3)
+var cache = make(map[string]sdf.SDF3)
 
 // Register will add a new part to be available for rendering.
 func Register(name string, fn func() sdf.SDF3) {
@@ -15,48 +16,40 @@ func Register(name string, fn func() sdf.SDF3) {
 }
 
 func getMesh(name string) sdf.SDF3 {
+	if s, ok := cache[name]; ok {
+		return s
+	}
 	fn, ok := names[name]
 	if !ok {
 		log.Println("Not found:", name)
 		return nil
 	}
-	return fn()
+	cache[name] = fn()
+	return cache[name]
 }
-func renderSTL(name string, res int) {
-	mesh := getMesh(name)
+func renderSTL(name string, mesh sdf.SDF3, ppmm float64) {
 	if mesh == nil {
 		return
 	}
+	res := int(mesh.BoundingBox().Size().MaxComponent() * ppmm)
 	sdf.RenderSTL(mesh, res, name+".stl")
 }
-func renderPNG(name string, floor bool) {
-	mesh := getMesh(name)
-	if mesh == nil {
-		return
-	}
-	sdf.RenderPNG(mesh, floor)
-}
+
 func main() {
-	resolution := flag.Int("res", 250, "Render sampling resolution (only valid for STL).")
-	png := flag.Bool("png", false, "Render PNG instead of STL.")
-	floor := flag.Bool("floor", false, "Render the floor (only valid for PNG).")
+	resolution := flag.Float64("res", 5, "Render sampling resolution (pixels per mm).")
+	assemble := flag.Bool("assemble", false, "Render assembly instructions.")
 	flag.Parse()
 	if flag.NArg() == 0 {
 		log.Println("Processing all", len(names), "objects.")
 		for name := range names {
-			if *png {
-				renderPNG(name, *floor)
-			} else {
-				renderSTL(name, *resolution)
-			}
+			renderSTL(name, getMesh(name), *resolution)
 		}
 	} else {
 		for _, name := range flag.Args() {
-			if *png {
-				renderPNG(name, *floor)
-			} else {
-				renderSTL(name, *resolution)
-			}
+			renderSTL(name, getMesh(name), *resolution)
 		}
+	}
+	if *assemble {
+		renderSTL("assemble", assembleMesh(), *resolution)
 	}
 }

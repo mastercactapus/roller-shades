@@ -13,7 +13,7 @@ func init() {
 		h = 3
 	)
 
-	Register("magnetic-stop-ring", func() sdf.SDF3 {
+	Register("magnetic-stop", func() sdf.SDF3 {
 		ring := builder.NewCylinder(h, cfg.MagStop.RingDiameter+cfg.MagStop.MagnetDiameter+padding*2)
 		ring = ring.Difference(
 			builder.NewCylinder(h, cfg.Misc.ScrewDiameter),

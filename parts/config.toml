@@ -20,7 +20,7 @@ ID = 15.4 # inner diameter of the roller tube
 
 [MagStop]
 StopPositions = 9 # number of stop positions, must be divisible by 3
-MagDiameter = 6.45 # diameter of individual magnets
+MagnetDiameter = 6.45 # diameter of individual magnets
 RingDiameter = 40.0 # desired diameter of the magnetic ring
 
 [MagStop.Bearing] # 806

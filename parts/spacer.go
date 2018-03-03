@@ -8,7 +8,7 @@ import (
 func init() {
 	const (
 		inset = 1.5
-		space = .75
+		space = 1.5
 	)
 	Register("spacer", func() sdf.SDF3 {
 		screwD := cfg.Misc.ScrewDiameter
