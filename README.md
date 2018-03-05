@@ -65,8 +65,8 @@ Available Commands:
 This command always returns `OK`.
 
 ```
-> AT
-< OK
+< AT
+> OK
 ```
 
 ### AT+NAME?
@@ -74,9 +74,9 @@ This command always returns `OK`.
 Returns the current name. Default is `DIY Roller Shades`.
 
 ```
-> AT+NAME?
-< +NAME:DIY Roller Shades
-< OK
+< AT+NAME?
+> +NAME:DIY Roller Shades
+> OK
 ```
 
 ### AT+NAME=
@@ -84,20 +84,20 @@ Returns the current name. Default is `DIY Roller Shades`.
 Saves the new name to EEPROM. Must be between 1 and 32 bytes.
 
 ```
-> AT+NAME=foobar
-< OK
+< AT+NAME=foobar
+> OK
 ```
 
 Too Short:
 ```
-> AT+NAME=
-< ERR:402:Invalid Args:New name must be specified.
+< AT+NAME=
+> ERR:402:Invalid Args:New name must be specified.
 ```
 
 Too Long:
 ```
-> AT+NAME=really_long_name_that_wont_be_accepted
-< ERR:402:Invalid Args:New name must be 32 characters or less.
+< AT+NAME=really_long_name_that_wont_be_accepted
+> ERR:402:Invalid Args:New name must be 32 characters or less.
 ```
 
 ### AT+OPEN
@@ -105,14 +105,14 @@ Too Long:
 Commands the shade to move to the full-open position. This has the same effect as `AT+POS=100`.
 
 ```
-> AT+OPEN
-< OK
+< AT+OPEN
+> OK
 ```
 
 Locked or uncalibrated:
 ```
-> AT+OPEN
-< ERR:700:Forbidden:Device is locked.
+< AT+OPEN
+> ERR:700:Forbidden:Device is locked.
 ```
 
 
@@ -121,14 +121,14 @@ Locked or uncalibrated:
 Commands the shade to move to the full-closed position. This has the same effect as `AT+POS=0`.
 
 ```
-> AT+CLOSE
-< OK
+< AT+CLOSE
+> OK
 ```
 
 Locked or uncalibrated:
 ```
-> AT+CLOSE
-< ERR:700:Forbidden:Device is locked.
+< AT+CLOSE
+> ERR:700:Forbidden:Device is locked.
 ```
 
 
@@ -137,14 +137,14 @@ Locked or uncalibrated:
 Stops the shade movement at the current position.
 
 ```
-> AT+STOP
-< OK
+< AT+STOP
+> OK
 ```
 
 Locked or uncalibrated:
 ```
-> AT+STOP
-< ERR:700:Forbidden:Device is locked.
+< AT+STOP
+> ERR:700:Forbidden:Device is locked.
 ```
 
 ### AT+LOCK?
@@ -153,16 +153,16 @@ Return the current lock state.
 
 Locked:
 ```
-> AT+LOCK?
-< +LOCK:1
-< OK
+< AT+LOCK?
+> +LOCK:1
+> OK
 ```
 
 Unlocked:
 ```
-> AT+LOCK?
-< +LOCK:0
-< OK
+< AT+LOCK?
+> +LOCK:0
+> OK
 ```
 
 ### AT+LOCK=1
@@ -170,8 +170,8 @@ Unlocked:
 Lock the device in position.
 
 ```
-> AT+LOCK=1
-< OK
+< AT+LOCK=1
+> OK
 ```
 
 ### AT+LOCK=0
@@ -179,14 +179,14 @@ Lock the device in position.
 Unlock the device.
 
 ```
-> AT+LOCK=0
-< OK
+< AT+LOCK=0
+> OK
 ```
 
 Uncalibrated:
 ```
-> AT+LOCK=0
-< ERR:701:Not Allowed:Device must be calibrated first.
+< AT+LOCK=0
+> ERR:701:Not Allowed:Device must be calibrated first.
 ```
 
 ### AT+POS?
@@ -194,15 +194,15 @@ Uncalibrated:
 Return the current position of the shade.
 
 ```
-> AT+POS?
-< +POS:55
-< OK
+< AT+POS?
+> +POS:55
+> OK
 ```
 
 Uncalibrated:
 ```
-> AT+POS?
-< ERR:501:Action Failed:Device must be calibrated first.
+< AT+POS?
+> ERR:501:Action Failed:Device must be calibrated first.
 ```
 
 ### AT+POS=
@@ -210,24 +210,24 @@ Uncalibrated:
 Set the new position. This command may return before the shade reaches the desired position.
 
 ```
-> AT+POS=55
-< OK
+< AT+POS=55
+> OK
 ```
 
 Out of range:
 ```
-> AT+POS=128
-< ERR:601:Out of Range:The argument value is not between 0 and 100 included.
+< AT+POS=128
+> ERR:601:Out of Range:The argument value is not between 0 and 100 included.
 ```
 
 Uncalibrated:
 ```
-> AT+POS=55
-< ERR:501:Action Failed:Device must be calibrated first.
+< AT+POS=55
+> ERR:501:Action Failed:Device must be calibrated first.
 ```
 
 Locked:
 ```
-> AT+POS=55
-< ERR:700:Forbidden:Device is locked.
+< AT+POS=55
+> ERR:700:Forbidden:Device is locked.
 ```
