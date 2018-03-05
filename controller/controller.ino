@@ -20,6 +20,7 @@ long targetSteps = -1;
 
 elapsedMillis sinceLastMovement = 0;
 elapsedMillis sinceLastState = 0;
+elapsedMillis sinceLastIdle = 0;
 
 int piState = -1;
 
@@ -164,7 +165,7 @@ void setTargetPos(long n) { // rounded to nearest step
   targetSteps = (openStepCount*n/10+5)/10;
 }
 bool isCalibrated() {
-  return targetSteps != -1;
+  return openStepCount != 0;
 }
 
 void STOP() {
@@ -289,6 +290,14 @@ int stepDelay(int slow, int fast, int dur) {
 }
 
 void loop() {
+  if (state == Idle) {
+      sinceLastIdle = 0;
+  } else if (sinceLastIdle > 10000) {
+    STOP();
+    changeState(Idle);
+    ServiceLocked = true;
+  }
+
   int button = detectButtonPress();
   
   if (!button && Serial.available() >= 3) {
@@ -316,6 +325,7 @@ void loop() {
   if (button >= 3000) {
     pos = 0;
     targetSteps = -1;
+    openStepCount = 0;
     ServiceLocked = true;
     changeState(Homing);
   }
@@ -323,8 +333,8 @@ void loop() {
   long cur = currentPos();
   long tgt = targetPos();
   if (isCalibrated()) {
-    if (!ServiceLocked && cur != tgt && state == Idle) {
-      if (cur == 95) { // pulled down from top
+    if (!ServiceLocked && pos!=targetSteps && state == Idle) {
+      if (cur >= 95) { // pulled down from top
         setTargetPos(0);
         tgt = 0;
       } else if (cur < 95) {
@@ -357,36 +367,26 @@ void loop() {
     case Up:
       if (sinceLastMovement > 600) {
         STOP();
-        ServiceLocked = true;
-        return;
-      }
-      if (sinceLastState > 5000) {
-        STOP();
-        ServiceLocked = true;
         return;
       }
 
-      move(stepDelay(2000, 1300, sinceLastState));
+      move(stepDelay(2200, 1300, sinceLastState));
       break;
     case Down:
       if (sinceLastMovement > 600) {
         STOP();
-        ServiceLocked = true;
         return;
       }
-      if (sinceLastState > 5000) {
-        STOP();
-        ServiceLocked = true;
-        return;
-      }
+
       move(stepDelay(2200, 750, sinceLastState));
       break;
     case IdleWait:
-      if (sinceLastState > 600) {
+      if (sinceLastState > 1500) {
+        targetSteps = pos;
         changeState(Idle);
         return;
       }
-      if (sinceLastState > 300) {
+      if (sinceLastState > 1000) {
         digitalWrite(runPin, 0);
       } else {
         digitalWrite(runPin, 1);
