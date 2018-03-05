@@ -50,6 +50,9 @@ func main() {
 		}
 	} else {
 		for _, name := range flag.Args() {
+			if name == "-" {
+				continue
+			}
 			renderSTL(*dir, name, getMesh(name), *res)
 		}
 	}
