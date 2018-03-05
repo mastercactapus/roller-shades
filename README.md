@@ -46,14 +46,15 @@ At startup the device will emit `Ready.`. Commands are case-insensitive and newl
 - Error format: `ERR:CODE:NAME:DETAILS`.
 
 Available Commands:
+
 | Command | Arg/Return Type | Description |
 | --- | --- | --- |
-| `AT` || NOOP operaion |
+| `AT` | | NOOP operaion |
 | `AT+NAME?` | string | Returns the current name of the device. |
 | `AT+NAME= `| string | Sets the device name to the provided value. 32 bytes max |
-| `AT+OPEN` || Opens the shade. |
-| `AT+CLOSE` || Closes the shade. |
-| `AT+STOP` || Stops movement of the shade. |
+| `AT+OPEN` | | Opens the shade. |
+| `AT+CLOSE` | | Closes the shade. |
+| `AT+STOP` | | Stops movement of the shade. |
 | `AT+LOCK?` | 0 or 1 | Returns the lock state of the device. |
 | `AT+LOCK=` | 0 or 1 | Sets the lock state of the device. |
 | `AT+POS?` | int, 0 to 100 | Returns the current position of the shade. 100 is fully open. |
@@ -95,7 +96,7 @@ Too Short:
 
 Too Long:
 ```
-> AT+NAME=
+> AT+NAME=really_long_name_that_wont_be_accepted
 < ERR:402:Invalid Args:New name must be 32 characters or less.
 ```
 
