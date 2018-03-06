@@ -176,7 +176,10 @@ void STOP() {
 void processSerialCommand() {
   String c = Serial.readStringUntil('\n');
   c.trim();
-  if (c.equalsIgnoreCase("AT")) {
+  if (c.equals("")) {
+    // don't respond
+    return;
+  } else if (c.equalsIgnoreCase("AT")) {
     // noop
   } else if (c.equalsIgnoreCase("AT+NAME?")) {
     Serial.print("+NAME:");
