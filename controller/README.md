@@ -18,8 +18,7 @@ Available Commands:
 | Command | Arg/Return Type | Description |
 | --- | --- | --- |
 | `AT` | | NOOP operaion |
-| `AT+NAME?` | string | Returns the current name of the device. |
-| `AT+NAME= `| string | Sets the device name to the provided value. 32 bytes max |
+| `AT+STATUS?` | enum | Returns the current device status. |
 | `AT+OPEN` | | Opens the shade. |
 | `AT+CLOSE` | | Closes the shade. |
 | `AT+STOP` | | Stops movement of the shade. |
@@ -37,35 +36,23 @@ SEND: AT
 RECV: OK
 ```
 
-### AT+NAME?
+## AT+STATUS?
 
-Returns the current name. Default is `DIY Roller Shades`.
+Returns the current status of the device.
 
+| Value | Description |
+| --- | --- |
+| `IDLE` | Device is not currently performing any action. |
+| `CAL` | Needs calibration. |
+| `HOME` | Performing calibration. |
+| `UP` | Moving up (opening). |
+| `DOWN` | Moving down (closing). |
+
+Idle:
 ```
-SEND: AT+NAME?
-RECV: +NAME:DIY Roller Shades
+SEND: AT+STATUS?
+RECV: +STATUS:IDLE
 RECV: OK
-```
-
-### AT+NAME=
-
-Saves the new name to EEPROM. Must be between 1 and 32 bytes.
-
-```
-SEND: AT+NAME=foobar
-RECV: OK
-```
-
-Too Short:
-```
-SEND: AT+NAME=
-RECV: ERR:402:Invalid Args:New name must be specified.
-```
-
-Too Long:
-```
-SEND: AT+NAME=really_long_name_that_wont_be_accepted
-RECV: ERR:402:Invalid Args:New name must be 32 characters or less.
 ```
 
 ### AT+OPEN
