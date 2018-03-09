@@ -1,0 +1,3 @@
+
+char ssid[] = "Network Name Here";
+char pass[] = "WPA Password Here";
